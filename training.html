@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dentally Vision AI - Master Early Caries Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #64748b;
+            background-color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .hero-video {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-video:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 20px solid #2563eb;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 4px;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .video-title {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-alt {
+            background-color: #f8fafc;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumbnail {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-thumbnail.blue {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+        }
+
+        .video-thumbnail.purple {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
+
+        .video-thumbnail.orange {
+            background: linear-gradient(135deg, #ea580c, #dc2626);
+        }
+
+        .small-play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .small-play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .small-play-icon {
+            width: 0;
+            height: 0;
+            border-left: 16px solid #16a34a;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 3px;
+        }
+
+        .video-card-content {
+            padding: 1.5rem;
+        }
+
+        .video-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-card p {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-icon {
+            width: 60px;
+            height: 60px;
+            background: #16a34a;
+            border-radius: 12px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resource-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #16a34a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #15803d;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">Dentally Vision AI</a>
+            <ul class="nav-links">
+                <li><a href="#getting-started">Get Started</a></li>
+                <li><a href="#ai-mindset">AI Philosophy</a></li>
+                <li><a href="#clinical-mastery">Clinical Detection</a></li>
+                <li><a href="#patient-communication">Patient Communication</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="badge">Training Hub</div>
+                    <h1>Master AI-Assisted Early Caries Detection</h1>
+                    <p>Learn to integrate Dentally Vision AI into your clinical workflow to improve diagnostic excellence and patient trust.</p>
+                </div>
+                <div class="hero-video" onclick="playVideo('overview')">
+                    <div class="video-placeholder">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-title">Complete Training Overview</div>
+                        <div class="video-duration">4:45</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Started Section -->
+    <section class="section" id="getting-started">
+        <div class="container">
+            <h2 class="section-title">Getting Started</h2>
+            <p class="section-subtitle">Essential foundation videos to begin your AI-assisted diagnostic journey</p>
+            
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('setup')">
+                    <div class="video-thumbnail">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">4:30</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Initial Setup & Configuration</h3>
+                        <p>Step-by-step guide to configuring Dentally Vision AI in your practice management system and clinical workflow.</p>
+                        <div class="video-meta">
+                            <span>Essential • Video 1</span>
+                            <span>4 min 30s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('first-scan')">
+                    <div class="video-thumbnail blue">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">5:00</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Your First AI-Assisted Scan</h3>
+                        <p>Walkthrough of conducting your first radiographic analysis with AI assistance, from image capture to interpretation.</p>
+                        <div class="video-meta">
+                            <span>Practical • Video 2</span>
+                            <span>5 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('workflow-integration')">
+                    <div class="video-thumbnail purple">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">4:20</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Seamless Workflow Integration</h3>
+                        <p>Learn to incorporate AI insights into your existing clinical routine without disrupting patient care or efficiency.</p>
+                        <div class="video-meta">
+                            <span>Workflow • Video 3</span>
+                            <span>4 min 20s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Mindset Section -->
+    <section class="section section-alt" id="ai-mindset">
+        <div class="container">
+            <h2 class="section-title">AI in Your Clinic</h2>
+            <p class="section-subtitle">Understanding your role as the clinical decision-maker with AI as your diagnostic assistant</p>
+            
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('dentist-control')">
+                    <div class="video-thumbnail orange">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">3:45</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>The Dentist Remains in Control</h3>
+                        <p>Why clinical judgment always supersedes AI recommendations, and how to maintain diagnostic confidence while leveraging AI insights.</p>
+                        <div class="video-meta">
+                            <span>Philosophy • Video 4</span>
+                            <span>3 min 45s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('ai-assistant')">
+                    <div class="video-thumbnail">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">4:10</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>AI as Your Diagnostic Assistant</h3>
+                        <p>Understanding how AI enhances rather than replaces clinical expertise, with practical examples of human-AI collaboration.</p>
+                        <div class="video-meta">
+                            <span>Collaboration • Video 5</span>
+                            <span>4 min 10s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('building-confidence')">
+                    <div class="video-thumbnail blue">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">4:10</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Building Confidence in AI-Assisted Decisions</h3>
+                        <p>Strategies for developing trust in AI recommendations while maintaining critical evaluation skills and clinical independence.</p>
+                        <div class="video-meta">
+                            <span>Confidence • Video 6</span>
+                            <span>4 min 10s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clinical Detection Section -->
+    <section class="section" id="clinical-mastery">
+        <div class="container">
+            <h2 class="section-title">Clinical Detection Mastery</h2>
+            <p class="section-subtitle">Advanced techniques for early caries identification and diagnostic precision</p>
+            
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('early-detection')">
+                    <div class="video-thumbnail purple">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">5:00</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Early Caries Detection Techniques</h3>
+                        <p>Master the identification of incipient caries lesions using AI-enhanced radiographic analysis and visual correlation methods.</p>
+                        <div class="video-meta">
+                            <span>Detection • Video 7</span>
+                            <span>5 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('diagnostic-accuracy')">
+                    <div class="video-thumbnail orange">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">4:55</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Maximizing Diagnostic Accuracy</h3>
+                        <p>Learn to combine AI insights with clinical examination findings to achieve optimal diagnostic precision and treatment planning.</p>
+                        <div class="video-meta">
+                            <span>Accuracy • Video 8</span>
+                            <span>4 min 55s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Patient Communication Section -->
+    <section class="section section-alt" id="patient-communication">
+        <div class="container">
+            <h2 class="section-title">Patient Communication Excellence</h2>
+            <p class="section-subtitle">Build trust through transparent communication about AI-assisted diagnostics</p>
+            
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('explaining-ai')">
+                    <div class="video-thumbnail">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">3:40</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Explaining AI to Patients</h3>
+                        <p>Effective communication strategies to help patients understand how AI enhances diagnostic accuracy without replacing clinical expertise.</p>
+                        <div class="video-meta">
+                            <span>Communication • Video 9</span>
+                            <span>3 min 40s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('transparent-diagnosis')">
+                    <div class="video-thumbnail blue">
+                        <div class="small-play-button">
+                            <div class="small-play-icon"></div>
+                        </div>
+                        <div class="video-duration">3:25</div>
+                    </div>
+                    <div class="video-card-content">
+                        <h3>Transparent Diagnostic Discussions</h3>
+                        <p>Master patient conversations about AI-assisted findings, building confidence in your diagnostic process and treatment recommendations.</p>
+                        <div class="video-meta">
+                            <span>Trust Building • Video 10</span>
+                            <span>3 min 25s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Downloadable Resources</h2>
+            <p class="section-subtitle">Practical tools to support your AI integration journey</p>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                            <path d="M14 2H6C4.89 2 4.01 2.9 4.01 4L4 20C4 21.1 4.89 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z"/>
+                        </svg>
+                    </div>
+                    <h3>Quick Reference Guide</h3>
+                    <p>AI detection checklist and workflow integration steps for chairside reference during patient consultations.</p>
+                    <a href="#" class="btn btn-primary" onclick="downloadResource('guide')">Download PDF</a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z"/>
+                        </svg>
+                    </div>
+                    <h3>Patient Communication Scripts</h3>
+                    <p>Pre-written explanations and conversation starters to help patients understand AI-assisted diagnostics with confidence.</p>
+                    <a href="#" class="btn btn-primary" onclick="downloadResource('scripts')">Download PDF</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Practice?</h2>
+            <p>Start your free trial of Dentally Vision AI and experience the future of diagnostic excellence.</p>
+            <a href="#" class="btn btn-secondary" onclick="startTrial()">Start Free Trial</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Dentally Vision AI. Professional AI diagnostic assistance for dental practitioners.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Video play functionality
+        function playVideo(videoId) {
+            const videos = {
+                'overview': { title: 'Complete Training Overview', duration: '4:45' },
+                'setup': { title: 'Initial Setup & Configuration', duration: '4:30' },
+                'first-scan': { title: 'Your First AI-Assisted Scan', duration: '5:00' },
+                'workflow-integration': { title: 'Seamless Workflow Integration', duration: '4:20' },
+                'dentist-control': { title: 'The Dentist Remains in Control', duration: '3:45' },
+                'ai-assistant': { title: 'AI as Your Diagnostic Assistant', duration: '4:10' },
+                'building-confidence': { title: 'Building Confidence in AI-Assisted Decisions', duration: '4:10' },
+                'early-detection': { title: 'Early Caries Detection Techniques', duration: '5:00' },
+                'diagnostic-accuracy': { title: 'Maximizing Diagnostic Accuracy', duration: '4:55' },
+                'explaining-ai': { title: 'Explaining AI to Patients', duration: '3:40' },
+                'transparent-diagnosis': { title: 'Transparent Diagnostic Discussions', duration: '3:25' }
+            };
+            
+            const video = videos[videoId];
+            if (video) {
+                alert(`Playing: ${video.title} (${video.duration})\n\nThis would open the video player in a real implementation.`);
+            }
+        }
+
+        // Download resource functionality
+        function downloadResource(resourceType) {
+            const resources = {
+                'guide': 'Quick Reference Guide',
+                'scripts': 'Patient Communication Scripts'
+            };
+            
+            alert(`Downloading: ${resources[resourceType]}\n\nThis would trigger the PDF download in a real implementation.`);
+        }
+
+        // Start trial functionality
+        function startTrial() {
+            alert('Redirecting to free trial signup...\n\nThis would link to your main landing page trial form in a real implementation.');
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Video card hover effects
+        document.querySelectorAll('.video-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
